@@ -1,6 +1,3 @@
-Here's the simplified and more casual version of the `README.md`:
-
-```markdown
 # Apica Search - Backend Service
 
 This is a backend service built in Go. It allows you to upload Parquet files, store records, and search through them efficiently. It uses Gin for the web server and a simple in-memory index to quickly find matching records.
@@ -106,5 +103,3 @@ BenchmarkRecordStore_Search-8   	47875905	        25.23 ns/op	       0 B/op	    
 
 4. **Better Benchmarking**:
    - Run more benchmarks to test bulk indexing, search performance, and memory usage.
-
----

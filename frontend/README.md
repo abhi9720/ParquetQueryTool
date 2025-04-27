@@ -1,6 +1,3 @@
-Here's a simple `README.md` for your frontend React app:
-
-```markdown
 # Apica Search - Frontend
 
 This is the frontend part of the Apica Search app. It allows users to upload files and search through them. The app is built using React and styled with Tailwind CSS.
