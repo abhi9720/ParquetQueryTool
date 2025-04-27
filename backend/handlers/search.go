@@ -2,23 +2,40 @@ package handlers
 
 import (
 	"apica-search/search"
+	"apica-search/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-// SearchHandler handles the search requests.
 func SearchHandler(c *gin.Context) {
-	// Get the search query from the URL
+
 	query := c.DefaultQuery("query", "")
 	if query == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing query parameter"})
 		return
 	}
 
-	// Perform the search using the Search function from the search package
-	result := search.Search(query)
+	result, err := search.Search(query)
 
-	// Return the search results
-	c.JSON(http.StatusOK, result)
+	if err != nil {
+		if err == utils.ErrRecordNotFound {
+			c.JSON(http.StatusOK, gin.H{
+				"results":        []interface{}{},
+				"count":          0,
+				"search_time_ms": result.SearchTimeMs,
+			})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "search failed"})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"results":        result.Results,
+		"count":          result.Count,
+		"search_time_ms": result.SearchTimeMs,
+	})
 }

@@ -16,7 +16,7 @@ func LoadParquetFile(filePath string) ([]models.Record, error) {
 	}
 	defer fr.Close()
 
-	pr, err := reader.NewParquetReader(fr, new(models.Record), 4) // 4 goroutines
+	pr, err := reader.NewParquetReader(fr, new(models.Record), 4)
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +35,12 @@ func LoadParquetFile(filePath string) ([]models.Record, error) {
 			break
 		}
 		for _, r := range rows {
-			if record, ok := r.(models.Record); ok {
-				records = append(records, record)
+			record, ok := r.(models.Record)
+			if !ok {
+				log.Println("Error: row is not a Record:", r)
+				continue
 			}
+			records = append(records, record)
 		}
 	}
 
